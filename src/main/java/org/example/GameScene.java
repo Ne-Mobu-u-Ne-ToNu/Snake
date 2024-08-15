@@ -4,6 +4,10 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public class GameScene extends Scene {
+    public GameScene(KL keyListener) {
+        super(keyListener);
+    }
+
     @Override
     public void update(double dt) {
 

@@ -8,6 +8,7 @@ public class Window extends JFrame implements Runnable {
 
     public static int currentState;
     public static Scene currentScene;
+    public static KL keyListener = new KL();
 
     public Window(int width, int height, String title) {
         setSize(width, height);
@@ -15,6 +16,7 @@ public class Window extends JFrame implements Runnable {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addKeyListener(keyListener);
         isRunning = true;
         Window.changeState(0);
     }
@@ -22,8 +24,8 @@ public class Window extends JFrame implements Runnable {
     public static void changeState(int newState) {
         Window.currentState = newState;
         switch (Window.currentState) {
-            case 0 -> Window.currentScene = new MenuScene();
-            case 1 -> Window.currentScene = new GameScene();
+            case 0 -> Window.currentScene = new MenuScene(keyListener);
+            case 1 -> Window.currentScene = new GameScene(keyListener);
             default -> {
                 System.out.println("Unknown scene");
                 Window.currentScene = null;
