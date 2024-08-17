@@ -11,10 +11,16 @@ public class Snake {
     public int tail = 0;
     public int head = 0;
 
+    public double ogWaitBetweenUpdates = 0.1f;
+    public double waitTimeLeft = ogWaitBetweenUpdates;
+
+    private Direction direction;
+
     public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight) {
         this.size = size;
         this.bodyWidth = bodyWidth;
         this.bodyHeight = bodyHeight;
+        this.direction = Direction.RIGHT;
 
         for (int i = 0; i <= size; i++) {
             Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight);
@@ -22,6 +28,15 @@ public class Snake {
             head++;
         }
         head--;
+    }
+
+    public void update(double dt) {
+        if (waitTimeLeft > 0) {
+            waitTimeLeft -= dt;
+            return;
+        }
+
+        move();
     }
 
     public void draw(Graphics2D g2) {
@@ -35,6 +50,48 @@ public class Snake {
             g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 2.0, subWidth, subHeight));
             g2.fill(new Rectangle2D.Double(piece.x + 2.0, piece.y + 4.0 + subHeight, subWidth, subHeight));
             g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 4.0 + subHeight, subWidth, subHeight));
+        }
+    }
+
+    private void move() {
+        waitTimeLeft = ogWaitBetweenUpdates;
+        double newX = 0;
+        double newY = 0;
+
+        switch (direction) {
+            case RIGHT -> {
+                newX = body[head].x + bodyWidth;
+                newY = body[head].y;
+            }
+            case LEFT -> {
+                newX = body[head].x - bodyWidth;
+                newY = body[head].y;
+            }
+            case UP -> {
+                newX = body[head].x;
+                newY = body[head].y - bodyHeight;
+            }
+            case DOWN -> {
+                newX = body[head].x;
+                newY = body[head].y + bodyHeight;
+            }
+        }
+
+        body[(head + 1) % body.length] = body[tail];
+        body[tail] = null;
+        head = (head + 1) % body.length;
+        tail = (tail + 1) % body.length;
+
+        body[head].x = newX;
+        body[head].y = newY;
+    }
+
+    public void changeDirection(Direction direction) {
+        if (this.direction == Direction.LEFT && direction != Direction.RIGHT ||
+                this.direction == Direction.RIGHT && direction != Direction.LEFT ||
+                this.direction == Direction.UP && direction != Direction.DOWN ||
+                this.direction == Direction.DOWN && direction != Direction.UP) {
+            this.direction = direction;
         }
     }
 }

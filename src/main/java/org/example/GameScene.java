@@ -1,7 +1,9 @@
 package org.example;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
+import java.security.Key;
 
 public class GameScene extends Scene {
     private final Rect background, foreground;
@@ -15,7 +17,8 @@ public class GameScene extends Scene {
 
     @Override
     public void update(double dt) {
-
+        snakeControl();
+        snake.update(dt);
     }
 
     @Override
@@ -28,5 +31,17 @@ public class GameScene extends Scene {
         g2.setColor(Color.WHITE);
         g2.fill(new Rectangle2D.Double(foreground.x, foreground.y, foreground.width, foreground.height));
         snake.draw(g2);
+    }
+
+    public void snakeControl() {
+        if (keyListener.isKeyPressed(KeyEvent.VK_LEFT)) {
+            snake.changeDirection(Direction.LEFT);
+        } else if (keyListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
+            snake.changeDirection(Direction.RIGHT);
+        } else if (keyListener.isKeyPressed(KeyEvent.VK_UP)) {
+            snake.changeDirection(Direction.UP);
+        } else if (keyListener.isKeyPressed(KeyEvent.VK_DOWN)) {
+            snake.changeDirection(Direction.DOWN);
+        }
     }
 }
