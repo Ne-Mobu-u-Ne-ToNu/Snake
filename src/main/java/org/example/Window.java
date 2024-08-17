@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Window extends JFrame implements Runnable {
+    private static Window window = null;
     public boolean isRunning;
 
-    public static int currentState;
-    public static Scene currentScene;
-    public static KL keyListener = new KL();
+    public int currentState;
+    public Scene currentScene;
+    public KL keyListener = new KL();
+    public ML mouseListener = new ML();
 
     public Window(int width, int height, String title) {
         setSize(width, height);
@@ -17,20 +19,33 @@ public class Window extends JFrame implements Runnable {
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addKeyListener(keyListener);
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseListener);
         isRunning = true;
-        Window.changeState(0);
+        changeState(0);
     }
 
-    public static void changeState(int newState) {
-        Window.currentState = newState;
-        switch (Window.currentState) {
-            case 0 -> Window.currentScene = new MenuScene(keyListener);
-            case 1 -> Window.currentScene = new GameScene(keyListener);
+    public static Window getWindow() {
+        if (Window.window == null) {
+            Window.window = new Window(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.TITLE);
+        }
+        return Window.window;
+    }
+
+    public void changeState(int newState) {
+        currentState = newState;
+        switch (currentState) {
+            case 0 -> currentScene = new MenuScene(keyListener, mouseListener);
+            case 1 -> currentScene = new GameScene(keyListener);
             default -> {
                 System.out.println("Unknown scene");
-                Window.currentScene = null;
+                currentScene = null;
             }
         }
+    }
+
+    public void close() {
+        isRunning = false;
     }
 
     public void update(double dt) {
@@ -60,5 +75,7 @@ public class Window extends JFrame implements Runnable {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        this.dispose();
     }
 }
