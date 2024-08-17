@@ -10,7 +10,9 @@ public class ML extends MouseAdapter implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        isPressed = true;
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            isPressed = true;
+        }
     }
 
     @Override
