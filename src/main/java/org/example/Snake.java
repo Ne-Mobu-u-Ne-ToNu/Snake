@@ -58,15 +58,19 @@ public class Snake {
 
     public boolean isIntersectingWithSelf() {
         Rect headR = body[head];
-        for (int i = tail; i != head; i = (i + 1) % body.length) {
-            if (isIntersecting(headR, body[i])) return true;
-        }
-        return false;
+        return isIntersectingWithRect(headR);
     }
 
     private boolean isIntersecting(Rect r1, Rect r2) {
         return (r1.x >= r2.x && r1.x + r1.width <= r2.x + r2.width &&
                 r1.y >= r2.y && r1.y + r1.height <= r2.y + r2.height);
+    }
+
+    public boolean isIntersectingWithRect(Rect rect) {
+        for (int i = tail; i != head; i = (i + 1) % body.length) {
+            if (isIntersecting(rect, body[i])) return true;
+        }
+        return false;
     }
 
     private void move() {
@@ -109,5 +113,9 @@ public class Snake {
                 this.direction == Direction.DOWN && direction != Direction.UP) {
             this.direction = direction;
         }
+    }
+
+    public void grow() {
+
     }
 }
