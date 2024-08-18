@@ -36,6 +36,9 @@ public class Snake {
             return;
         }
 
+        if (isIntersectingWithSelf()) {
+            Window.getWindow().changeState(0);
+        }
         move();
     }
 
@@ -51,6 +54,19 @@ public class Snake {
             g2.fill(new Rectangle2D.Double(piece.x + 2.0, piece.y + 4.0 + subHeight, subWidth, subHeight));
             g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 4.0 + subHeight, subWidth, subHeight));
         }
+    }
+
+    public boolean isIntersectingWithSelf() {
+        Rect headR = body[head];
+        for (int i = tail; i != head; i = (i + 1) % body.length) {
+            if (isIntersecting(headR, body[i])) return true;
+        }
+        return false;
+    }
+
+    private boolean isIntersecting(Rect r1, Rect r2) {
+        return (r1.x >= r2.x && r1.x + r1.width <= r2.x + r2.width &&
+                r1.y >= r2.y && r1.y + r1.height <= r2.y + r2.height);
     }
 
     private void move() {
