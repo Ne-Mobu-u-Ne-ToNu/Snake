@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class LoadingContent {
-    private static BufferedImage titleMenu, play, playPressed, exit, exitPressed, foreground,
+    private static BufferedImage titleMenu, play, playPressed, exit, exitPressed, foreground, background,
             titleGameOver, playAgain, yes, yesPressed, no, noPressed;
 
     public static void load() {
@@ -18,6 +18,7 @@ public class LoadingContent {
             exitPressed = spriteSheetMenu.getSubimage(264, 0, 233, 93);
 
             foreground = ImageIO.read(new File("assets/Grass.jpg"));
+            background = ImageIO.read(new File("assets/Wall.png"));
 
             BufferedImage spriteSheetGameOver = ImageIO.read(new File("assets/gameOverSprite.png"));
             titleGameOver = spriteSheetGameOver.getSubimage(0, 0, 480, 480);
@@ -54,6 +55,10 @@ public class LoadingContent {
 
     public static BufferedImage getForeground() {
         return foreground;
+    }
+
+    public static BufferedImage getBackground() {
+        return background;
     }
 
     public static BufferedImage getTitleGameOver() {
