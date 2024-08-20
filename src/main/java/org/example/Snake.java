@@ -4,28 +4,28 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Snake {
-    public Rect[] body = new Rect[100];
+    public Rect[] body = new Rect[10000];
     public Rect background;
     public double bodyWidth, bodyHeight;
 
     public int size;
+    public int currentSize;
     public int tail = 0;
     public int head = 0;
 
     public double ogWaitBetweenUpdates = 0.1f;
     public double waitTimeLeft = ogWaitBetweenUpdates;
 
-    private Direction direction;
 
     public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight, Rect background) {
         this.size = size;
+        this.currentSize = this.size;
         this.bodyWidth = bodyWidth;
         this.bodyHeight = bodyHeight;
-        this.direction = Direction.RIGHT;
         this.background = background;
 
         for (int i = 0; i <= size; i++) {
-            Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight);
+            Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight, Direction.RIGHT);
             body[i] = bodyPiece;
             head++;
         }
@@ -85,7 +85,7 @@ public class Snake {
         double newX = 0;
         double newY = 0;
 
-        switch (direction) {
+        switch (body[head].direction) {
             case RIGHT -> {
                 newX = body[head].x + bodyWidth;
                 newY = body[head].y;
@@ -105,6 +105,7 @@ public class Snake {
         }
 
         body[(head + 1) % body.length] = body[tail];
+        body[(head + 1) % body.length].direction = body[head].direction;
         body[tail] = null;
         head = (head + 1) % body.length;
         tail = (tail + 1) % body.length;
@@ -114,22 +115,25 @@ public class Snake {
     }
 
     public void changeDirection(Direction direction) {
-        if (this.direction == Direction.LEFT && direction != Direction.RIGHT ||
-                this.direction == Direction.RIGHT && direction != Direction.LEFT ||
-                this.direction == Direction.UP && direction != Direction.DOWN ||
-                this.direction == Direction.DOWN && direction != Direction.UP) {
-            this.direction = direction;
+        Direction headDirection = body[head].direction;
+        if (headDirection == Direction.LEFT && direction != Direction.RIGHT ||
+                headDirection == Direction.RIGHT && direction != Direction.LEFT ||
+                headDirection == Direction.UP && direction != Direction.DOWN ||
+                headDirection == Direction.DOWN && direction != Direction.UP) {
+            body[head].direction = direction;
         }
     }
 
     public void grow() {
         double newX = 0;
         double newY = 0;
+        Direction newDirection = Direction.RIGHT;
 
-        switch (direction) {
+        switch (body[tail].direction) {
             case RIGHT -> {
                 newX = body[tail].x - bodyWidth;
                 newY = body[tail].y;
+                newDirection = Direction.LEFT;
             }
             case LEFT -> {
                 newX = body[tail].x + bodyWidth;
@@ -138,16 +142,19 @@ public class Snake {
             case UP -> {
                 newX = body[tail].x;
                 newY = body[tail].y + bodyHeight;
+                newDirection = Direction.DOWN;
             }
             case DOWN -> {
                 newX = body[tail].x;
                 newY = body[tail].y - bodyHeight;
+                newDirection = Direction.UP;
             }
         }
 
-        Rect newBodyPiece = new Rect(newX, newY, bodyWidth, bodyHeight);
+        Rect newBodyPiece = new Rect(newX, newY, bodyWidth, bodyHeight, newDirection);
 
         tail = (tail - 1) % body.length;
         body[tail] = newBodyPiece;
+        currentSize++;
     }
 }
