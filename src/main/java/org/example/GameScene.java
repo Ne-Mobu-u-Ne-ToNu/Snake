@@ -1,22 +1,26 @@
 package org.example;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
-import java.security.CryptoPrimitive;
-import java.security.Key;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class GameScene extends Scene {
-    private final Rect background, foreground;
+    private final Rect background, foregroundRect;
+    private final BufferedImage foreground;
     public Snake snake;
     public Food food;
-    public GameScene(KL keyListener, ML mouselistener) {
-        super(keyListener, mouselistener);
+    public GameScene(KL keyListener, ML mouseListener) {
+        super(keyListener, mouseListener);
         background = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        foreground = new Rect(24, 48, Constants.TILE_WIDTH * 31, Constants.TILE_WIDTH * 22);
-        snake = new Snake(5, 48, 48 + 24, 24, 24, foreground);
-        this.food = new Food(foreground, snake, 12, 12, Color.GREEN);
+        foregroundRect = new Rect(24, 48, Constants.TILE_WIDTH * 31, Constants.TILE_WIDTH * 22);
+        snake = new Snake(5, 48, 48 + 24, 24, 24, foregroundRect);
+        this.food = new Food(foregroundRect, snake, 12, 12, Color.GREEN);
         food.spawn();
+
+        foreground = LoadingContent.getForeground();
     }
 
     @Override
@@ -35,8 +39,7 @@ public class GameScene extends Scene {
         g2.setColor(Color.BLACK);
         g2.fill(new Rectangle2D.Double(background.x, background.y, background.width, background.height));
 
-        g2.setColor(Color.WHITE);
-        g2.fill(new Rectangle2D.Double(foreground.x, foreground.y, foreground.width, foreground.height));
+        g2.drawImage(foreground, (int) foregroundRect.x, (int) foregroundRect.y, (int) foregroundRect.width, (int) foregroundRect.height, null);
         snake.draw(g2);
         food.draw(g2);
     }

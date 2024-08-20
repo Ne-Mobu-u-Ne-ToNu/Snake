@@ -13,6 +13,7 @@ public class Window extends JFrame implements Runnable {
     public ML mouseListener = new ML();
 
     public Window(int width, int height, String title) {
+        LoadingContent.load();
         setSize(width, height);
         setTitle(title);
         setResizable(false);

@@ -13,17 +13,12 @@ public class GameOverScene extends Scene {
     public GameOverScene(KL keyListener, ML mouseListener) {
         super(keyListener, mouseListener);
 
-        try {
-            BufferedImage spriteSheet = ImageIO.read(new File("assets/gameOverSprite.png"));
-            title = spriteSheet.getSubimage(0, 0, 480, 480);
-            playAgain = spriteSheet.getSubimage(0, 480, 377, 90);
-            yes = spriteSheet.getSubimage(0, 570, 81, 52);
-            yesPressed = spriteSheet.getSubimage(81, 570, 81, 52);
-            no = spriteSheet.getSubimage(162, 572, 57, 49);
-            noPressed = spriteSheet.getSubimage(219, 572, 57, 49);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        title = LoadingContent.getTitleGameOver();
+        playAgain = LoadingContent.getPlayAgain();
+        yes = LoadingContent.getYes();
+        yesPressed = LoadingContent.getYesPressed();
+        no = LoadingContent.getNo();
+        noPressed = LoadingContent.getNoPressed();
 
         yesCurrent = yes;
         noCurrent = no;
@@ -61,7 +56,7 @@ public class GameOverScene extends Scene {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(new Color(139, 67, 167, 255));
+        g.setColor(Constants.foregroundColor);
         g.fillRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 
         g.drawImage(title, (int) titleRect.x, (int) titleRect.y, (int) titleRect.width, (int) titleRect.height, null);
