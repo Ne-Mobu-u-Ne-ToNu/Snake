@@ -15,7 +15,7 @@ public class GameScene extends Scene {
         backgroundRect = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         foregroundRect = new Rect(24, 48, Constants.TILE_WIDTH * 31, Constants.TILE_WIDTH * 22);
         snake = new Snake(5, 48, 48 + 24, 24, 24, foregroundRect);
-        this.food = new Food(foregroundRect, snake, 12, 12, Color.GREEN);
+        this.food = new Food(foregroundRect, snake, 24, 24);
         food.spawn();
 
         foreground = LoadingContent.getForeground();

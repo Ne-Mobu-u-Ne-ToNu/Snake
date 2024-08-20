@@ -7,6 +7,7 @@ import java.io.File;
 public class LoadingContent {
     private static BufferedImage titleMenu, play, playPressed, exit, exitPressed, foreground, background,
             titleGameOver, playAgain, yes, yesPressed, no, noPressed;
+    private static BufferedImage[] food;
 
     public static void load() {
         try {
@@ -27,6 +28,16 @@ public class LoadingContent {
             yesPressed = spriteSheetGameOver.getSubimage(81, 570, 81, 52);
             no = spriteSheetGameOver.getSubimage(162, 572, 57, 49);
             noPressed = spriteSheetGameOver.getSubimage(219, 572, 57, 49);
+
+            BufferedImage spriteSheetFood = ImageIO.read(new File("assets/Food.png"));
+            food = new BufferedImage[] {
+              spriteSheetFood.getSubimage(0, 0, 200, 200),
+              spriteSheetFood.getSubimage(200, 0, 200, 200),
+              spriteSheetFood.getSubimage(400, 0, 200, 200),
+              spriteSheetFood.getSubimage(0, 200, 200, 200),
+              spriteSheetFood.getSubimage(200, 200, 200, 200),
+              spriteSheetFood.getSubimage(400, 200, 200, 200)
+            };
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -83,5 +94,9 @@ public class LoadingContent {
 
     public static BufferedImage getNoPressed() {
         return noPressed;
+    }
+
+    public static BufferedImage[] getFood() {
+        return food;
     }
 }
