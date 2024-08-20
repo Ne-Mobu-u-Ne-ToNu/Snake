@@ -7,13 +7,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class MenuScene extends Scene {
-    public ML mouseListener;
     public BufferedImage title, play, playPressed, exit, exitPressed;
     public Rect playRect, exitRect, titleRect;
     public BufferedImage playCurrent, exitCurrent;
     public MenuScene(KL keyListener, ML mouseListener) {
-        super(keyListener);
-        this.mouseListener = mouseListener;
+        super(keyListener, mouseListener);
 
         try {
             BufferedImage spriteSheet = ImageIO.read(new File("assets/menuSprite.png"));

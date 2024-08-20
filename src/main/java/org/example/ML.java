@@ -37,4 +37,8 @@ public class ML extends MouseAdapter implements MouseListener {
     public boolean isPressed() {
         return this.isPressed;
     }
+
+    public void setNotPressed() {
+        this.isPressed = false;
+    }
 }

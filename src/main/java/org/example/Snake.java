@@ -10,7 +10,6 @@ public class Snake {
     public Direction direction;
 
     public int size;
-    public int currentSize;
     public int tail = 0;
     public int head = 0;
 
@@ -20,7 +19,6 @@ public class Snake {
 
     public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight, Rect background) {
         this.size = size;
-        this.currentSize = this.size;
         this.bodyWidth = bodyWidth;
         this.bodyHeight = bodyHeight;
         this.background = background;
@@ -41,7 +39,7 @@ public class Snake {
         }
 
         if (isIntersectingWithSelf()) {
-            Window.getWindow().changeState(0);
+            Window.getWindow().changeState(2);
         }
         changeDirection();
         move();
@@ -162,6 +160,5 @@ public class Snake {
 
         tail = (tail - 1) % body.length;
         body[tail] = newBodyPiece;
-        currentSize++;
     }
 }

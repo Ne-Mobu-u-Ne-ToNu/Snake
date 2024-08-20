@@ -10,8 +10,8 @@ public class GameScene extends Scene {
     private final Rect background, foreground;
     public Snake snake;
     public Food food;
-    public GameScene(KL keyListener) {
-        super(keyListener);
+    public GameScene(KL keyListener, ML mouselistener) {
+        super(keyListener, mouselistener);
         background = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         foreground = new Rect(24, 48, Constants.TILE_WIDTH * 31, Constants.TILE_WIDTH * 22);
         snake = new Snake(5, 48, 48 + 24, 24, 24, foreground);
