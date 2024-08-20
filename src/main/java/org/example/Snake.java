@@ -4,9 +4,10 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Snake {
-    public Rect[] body = new Rect[10000];
+    public Rect[] body = new Rect[1000];
     public Rect background;
     public double bodyWidth, bodyHeight;
+    public Direction direction;
 
     public int size;
     public int currentSize;
@@ -23,6 +24,7 @@ public class Snake {
         this.bodyWidth = bodyWidth;
         this.bodyHeight = bodyHeight;
         this.background = background;
+        this.direction = Direction.RIGHT;
 
         for (int i = 0; i <= size; i++) {
             Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight, Direction.RIGHT);
@@ -41,6 +43,7 @@ public class Snake {
         if (isIntersectingWithSelf()) {
             Window.getWindow().changeState(0);
         }
+        changeDirection();
         move();
     }
 
@@ -80,7 +83,7 @@ public class Snake {
                 head.y < background.y || head.y + head.height > background.y + background.height);
     }
 
-    private void move() {
+    public void move() {
         waitTimeLeft = ogWaitBetweenUpdates;
         double newX = 0;
         double newY = 0;
@@ -115,6 +118,10 @@ public class Snake {
     }
 
     public void changeDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    private void changeDirection() {
         Direction headDirection = body[head].direction;
         if (headDirection == Direction.LEFT && direction != Direction.RIGHT ||
                 headDirection == Direction.RIGHT && direction != Direction.LEFT ||
