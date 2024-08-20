@@ -5,6 +5,7 @@ import java.awt.geom.Rectangle2D;
 
 public class Snake {
     public Rect[] body = new Rect[100];
+    public Rect background;
     public double bodyWidth, bodyHeight;
 
     public int size;
@@ -16,11 +17,12 @@ public class Snake {
 
     private Direction direction;
 
-    public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight) {
+    public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight, Rect background) {
         this.size = size;
         this.bodyWidth = bodyWidth;
         this.bodyHeight = bodyHeight;
         this.direction = Direction.RIGHT;
+        this.background = background;
 
         for (int i = 0; i <= size; i++) {
             Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight);
@@ -58,7 +60,7 @@ public class Snake {
 
     public boolean isIntersectingWithSelf() {
         Rect headR = body[head];
-        return isIntersectingWithRect(headR);
+        return isIntersectingWithRect(headR) || isIntersectingWithBoundaries(headR);
     }
 
     private boolean isIntersecting(Rect r1, Rect r2) {
@@ -71,6 +73,11 @@ public class Snake {
             if (isIntersecting(rect, body[i])) return true;
         }
         return false;
+    }
+
+    public boolean isIntersectingWithBoundaries(Rect head) {
+        return (head.x < background.x || head.x + head.width > background.x + background.width ||
+                head.y < background.y || head.y + head.height > background.y + background.height);
     }
 
     private void move() {
@@ -116,6 +123,31 @@ public class Snake {
     }
 
     public void grow() {
+        double newX = 0;
+        double newY = 0;
 
+        switch (direction) {
+            case RIGHT -> {
+                newX = body[tail].x - bodyWidth;
+                newY = body[tail].y;
+            }
+            case LEFT -> {
+                newX = body[tail].x + bodyWidth;
+                newY = body[tail].y;
+            }
+            case UP -> {
+                newX = body[tail].x;
+                newY = body[tail].y + bodyHeight;
+            }
+            case DOWN -> {
+                newX = body[tail].x;
+                newY = body[tail].y - bodyHeight;
+            }
+        }
+
+        Rect newBodyPiece = new Rect(newX, newY, bodyWidth, bodyHeight);
+
+        tail = (tail - 1) % body.length;
+        body[tail] = newBodyPiece;
     }
 }
