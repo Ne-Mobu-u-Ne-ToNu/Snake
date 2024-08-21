@@ -6,7 +6,7 @@ import java.io.File;
 
 public class LoadingContent {
     private static BufferedImage titleMenu, play, playPressed, exit, exitPressed, foreground, background,
-            titleGameOver, playAgain, yes, yesPressed, no, noPressed;
+            titleGameOver, playAgain, yes, yesPressed, no, noPressed, snakeHead, snakeBody, snakeTail;
     private static BufferedImage[] food;
 
     public static void load() {
@@ -38,6 +38,11 @@ public class LoadingContent {
               spriteSheetFood.getSubimage(200, 200, 200, 200),
               spriteSheetFood.getSubimage(400, 200, 200, 200)
             };
+
+            BufferedImage spriteSheetSnake = ImageIO.read(new File("assets/Snake.png"));
+            snakeHead = spriteSheetSnake.getSubimage(0, 0, 300, 300);
+            snakeBody = spriteSheetSnake.getSubimage(300,  125, 300, 450);
+            snakeTail = spriteSheetSnake.getSubimage(0, 300, 300, 300);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -98,5 +103,17 @@ public class LoadingContent {
 
     public static BufferedImage[] getFood() {
         return food;
+    }
+
+    public static BufferedImage getSnakeHead() {
+        return snakeHead;
+    }
+
+    public static BufferedImage getSnakeBody() {
+        return snakeBody;
+    }
+
+    public static BufferedImage getSnakeTail() {
+        return snakeTail;
     }
 }

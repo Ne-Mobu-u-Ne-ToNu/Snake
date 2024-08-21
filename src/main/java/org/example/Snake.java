@@ -1,7 +1,8 @@
 package org.example;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Snake {
     public Rect[] body = new Rect[1000];
@@ -16,6 +17,9 @@ public class Snake {
     public double ogWaitBetweenUpdates = 0.1f;
     public double waitTimeLeft = ogWaitBetweenUpdates;
 
+    public Map<Direction, Double> snakeHeadRotation, snakeBodyRotation,
+            snakeTailRotation;
+
 
     public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight, Rect background) {
         this.size = size;
@@ -23,6 +27,20 @@ public class Snake {
         this.bodyHeight = bodyHeight;
         this.background = background;
         this.direction = Direction.RIGHT;
+
+        snakeHeadRotation = new HashMap<>();
+        snakeBodyRotation = new HashMap<>();
+        snakeTailRotation = snakeHeadRotation;
+
+        snakeHeadRotation.put(Direction.RIGHT, 90.0);
+        snakeHeadRotation.put(Direction.LEFT, -90.0);
+        snakeHeadRotation.put(Direction.UP, 0.0);
+        snakeHeadRotation.put(Direction.DOWN, 180.0);
+
+        snakeBodyRotation.put(Direction.RIGHT, 0.0);
+        snakeBodyRotation.put(Direction.LEFT, 180.0);
+        snakeBodyRotation.put(Direction.UP, -90.0);
+        snakeBodyRotation.put(Direction.DOWN, 90.0);
 
         for (int i = 0; i <= size; i++) {
             Rect bodyPiece = new Rect(startX + i * bodyWidth, startY, bodyWidth, bodyHeight, Direction.RIGHT);
@@ -48,14 +66,20 @@ public class Snake {
     public void draw(Graphics2D g2) {
         for (int i = tail; i != head; i = (i + 1) % body.length) {
             Rect piece = body[i];
-            double subWidth = (piece.width - 6.0) / 2.0;
-            double subHeight = (piece.height - 6.0) / 2.0;
 
-            g2.setColor(Color.BLACK);
-            g2.fill(new Rectangle2D.Double(piece.x + 2.0, piece.y + 2.0, subWidth, subHeight));
-            g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 2.0, subWidth, subHeight));
-            g2.fill(new Rectangle2D.Double(piece.x + 2.0, piece.y + 4.0 + subHeight, subWidth, subHeight));
-            g2.fill(new Rectangle2D.Double(piece.x + 4.0 + subWidth, piece.y + 4.0 + subHeight, subWidth, subHeight));
+            if (i == head - 1) {
+                g2.rotate(Math.toRadians(snakeHeadRotation.get(body[head].direction)), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
+                g2.drawImage(LoadingContent.getSnakeHead(), (int) piece.x - 4, (int) piece.y, (int) bodyWidth + 8, (int) bodyHeight, null);
+                g2.rotate(Math.toRadians(-snakeHeadRotation.get(body[head].direction)), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
+            } else if (i == tail) {
+                g2.rotate(Math.toRadians(snakeTailRotation.get(piece.direction) + 10), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
+                g2.drawImage(LoadingContent.getSnakeTail(), (int) piece.x - 6, (int) piece.y - 12, (int) bodyWidth + 8, (int) bodyHeight + 10, null);
+                g2.rotate(Math.toRadians(-snakeTailRotation.get(piece.direction) - 10), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
+            } else {
+                g2.rotate(Math.toRadians(snakeBodyRotation.get(piece.direction)), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
+                g2.drawImage(LoadingContent.getSnakeBody(), (int) piece.x, (int) piece.y, (int) bodyWidth, (int) bodyHeight, null);
+                g2.rotate(Math.toRadians(-snakeBodyRotation.get(body[i].direction)), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
+            }
         }
     }
 
@@ -157,8 +181,11 @@ public class Snake {
         }
 
         Rect newBodyPiece = new Rect(newX, newY, bodyWidth, bodyHeight, newDirection);
-
-        tail = (tail - 1) % body.length;
+        
+        tail = tail - 1;
+        if (tail < 0) {
+            tail = body.length + tail;
+        }
         body[tail] = newBodyPiece;
     }
 }

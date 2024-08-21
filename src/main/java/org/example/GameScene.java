@@ -36,8 +36,8 @@ public class GameScene extends Scene {
         Graphics2D g2 = (Graphics2D) g;
 
         g2.drawImage(background, (int) backgroundRect.x, (int) backgroundRect.y, (int) backgroundRect.width, (int) backgroundRect.height, null);
-
         g2.drawImage(foreground, (int) foregroundRect.x, (int) foregroundRect.y, (int) foregroundRect.width, (int) foregroundRect.height, null);
+
         snake.draw(g2);
         food.draw(g2);
     }
