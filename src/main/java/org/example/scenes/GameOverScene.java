@@ -1,9 +1,14 @@
-package org.example;
+package org.example.scenes;
 
-import javax.imageio.ImageIO;
+import org.example.Window;
+import org.example.content.Constants;
+import org.example.content.LoadingContent;
+import org.example.helpers.Rect;
+import org.example.listeners.KL;
+import org.example.listeners.ML;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class GameOverScene extends Scene {
     public BufferedImage title, playAgain, yes, yesPressed, no,noPressed;
@@ -35,7 +40,7 @@ public class GameOverScene extends Scene {
                 mouseListener.getY() >= yesRect.y && mouseListener.getY() <= yesRect.y + yesRect.height) {
             yesCurrent = yesPressed;
             if (mouseListener.isPressed()) {
-                Window.getWindow().changeState(1);
+                org.example.Window.getWindow().changeState(1);
                 mouseListener.setNotPressed();
             }
         } else {

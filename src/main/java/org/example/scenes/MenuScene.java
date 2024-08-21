@@ -1,10 +1,14 @@
-package org.example;
+package org.example.scenes;
 
-import javax.imageio.ImageIO;
+import org.example.*;
+import org.example.content.Constants;
+import org.example.content.LoadingContent;
+import org.example.helpers.Rect;
+import org.example.listeners.KL;
+import org.example.listeners.ML;
+
 import java.awt.Graphics;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class MenuScene extends Scene {
     public BufferedImage title, play, playPressed, exit, exitPressed;

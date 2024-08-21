@@ -1,4 +1,9 @@
-package org.example;
+package org.example.gameObjects;
+
+import org.example.helpers.Direction;
+import org.example.helpers.Rect;
+import org.example.Window;
+import org.example.content.LoadingContent;
 
 import java.awt.*;
 import java.util.HashMap;

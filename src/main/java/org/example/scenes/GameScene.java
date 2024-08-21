@@ -1,8 +1,16 @@
-package org.example;
+package org.example.scenes;
+
+import org.example.content.Constants;
+import org.example.content.LoadingContent;
+import org.example.gameObjects.Food;
+import org.example.gameObjects.Snake;
+import org.example.helpers.Direction;
+import org.example.helpers.Rect;
+import org.example.listeners.KL;
+import org.example.listeners.ML;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class GameScene extends Scene {

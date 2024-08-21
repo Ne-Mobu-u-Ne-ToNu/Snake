@@ -1,4 +1,4 @@
-package org.example;
+package org.example.listeners;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

@@ -1,4 +1,6 @@
-package org.example;
+package org.example.helpers;
+
+import org.example.helpers.Direction;
 
 public class Rect {
     public double x, y, width, height;

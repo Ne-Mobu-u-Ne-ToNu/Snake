@@ -1,4 +1,8 @@
-package org.example;
+package org.example.gameObjects;
+
+import org.example.helpers.Rect;
+import org.example.content.Constants;
+import org.example.content.LoadingContent;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.helpers;
 
 public class Time {
     public static double timeStarted = System.nanoTime();

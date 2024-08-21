@@ -1,5 +1,15 @@
 package org.example;
 
+import org.example.content.Constants;
+import org.example.content.LoadingContent;
+import org.example.helpers.Time;
+import org.example.listeners.KL;
+import org.example.listeners.ML;
+import org.example.scenes.GameOverScene;
+import org.example.scenes.GameScene;
+import org.example.scenes.MenuScene;
+import org.example.scenes.Scene;
+
 import javax.swing.*;
 import java.awt.*;
 

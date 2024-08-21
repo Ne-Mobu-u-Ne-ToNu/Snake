@@ -1,4 +1,7 @@
-package org.example;
+package org.example.scenes;
+
+import org.example.listeners.KL;
+import org.example.listeners.ML;
 
 import java.awt.Graphics;
 
