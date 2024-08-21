@@ -21,9 +21,11 @@ public class GameScene extends Scene {
     public GameScene(KL keyListener, ML mouseListener) {
         super(keyListener, mouseListener);
         backgroundRect = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        foregroundRect = new Rect(24, 48, Constants.TILE_WIDTH * 31, Constants.TILE_WIDTH * 22);
-        snake = new Snake(5, 48, 48 + 24, 24, 24, foregroundRect);
-        this.food = new Food(foregroundRect, snake, 24, 24);
+        foregroundRect = new Rect(Constants.TILE_SIZE, Constants.TILE_SIZE * 2,
+                Constants.TILE_SIZE * Constants.FOREGROUND_WIDTH, Constants.TILE_SIZE * Constants.FOREGROUND_HEIGHT);
+        snake = new Snake(Constants.initialSnakeSize, Constants.TILE_SIZE * 2, Constants.TILE_SIZE * 2 + Constants.TILE_SIZE,
+                Constants.TILE_SIZE, Constants.TILE_SIZE, foregroundRect);
+        this.food = new Food(foregroundRect, snake, (int) Constants.TILE_SIZE, (int) Constants.TILE_SIZE);
         food.spawn();
 
         foreground = LoadingContent.getForeground();

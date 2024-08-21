@@ -6,12 +6,12 @@ import org.example.content.LoadingContent;
 
 import java.awt.*;
 
+@SuppressWarnings("unused")
 public class Food {
     public Rect background;
     public Snake snake;
     public int width, height;
     public Rect rect;
-    public int padding;
     public int foodType;
     public boolean isSpawned;
 
@@ -21,7 +21,6 @@ public class Food {
         this.width = width;
         this.height = height;
         this.rect = new Rect(0, 0, width, height);
-        this.padding = (int)((Constants.TILE_WIDTH - this.width) / 2.0);
     }
 
     public void update(double dt) {
@@ -34,13 +33,13 @@ public class Food {
     }
 
     public void draw(Graphics2D g2) {
-        g2.drawImage(LoadingContent.getFood()[foodType],(int) this.rect.x + padding, (int) this.rect.y + padding, width, height, null);
+        g2.drawImage(LoadingContent.getFood()[foodType],(int) this.rect.x, (int) this.rect.y, width, height, null);
     }
 
     public void spawn() {
         do {
-            double randX = (int)(Math.random() * (int) (background.width / Constants.TILE_WIDTH)) * Constants.TILE_WIDTH + background.x;
-            double randY = (int)(Math.random() * (int) (background.height / Constants.TILE_WIDTH)) * Constants.TILE_WIDTH + background.y;
+            double randX = (int)(Math.random() * (int) (background.width / Constants.TILE_SIZE)) * Constants.TILE_SIZE + background.x;
+            double randY = (int)(Math.random() * (int) (background.height / Constants.TILE_SIZE)) * Constants.TILE_SIZE + background.y;
             this.rect.x = randX;
             this.rect.y = randY;
         } while (snake.isIntersectingWithRect(this.rect));
