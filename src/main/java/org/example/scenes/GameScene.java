@@ -13,11 +13,33 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+/**
+ * This class is used to implement the game screen
+ * where the most interesting things are happening.
+ * @author Ne-MoBu-u-Ne-ToNu
+ * @version 1.0
+ * @since 1.0
+ */
 public class GameScene extends Scene {
     private final Rect backgroundRect, foregroundRect;
     private final BufferedImage foreground, background;
+
+    /**
+     * Snake object
+     */
     public Snake snake;
+
+    /**
+     * Food object
+     */
     public Food food;
+
+    /**
+     * Constructor of the class to load all
+     * the main parameters
+     * @param keyListener class for register keyboard buttons
+     * @param mouseListener class for register mouse and cursor
+     */
     public GameScene(KL keyListener, ML mouseListener) {
         super(keyListener, mouseListener);
         backgroundRect = new Rect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
@@ -32,15 +54,24 @@ public class GameScene extends Scene {
         background = LoadingContent.getBackground();
     }
 
+    /**
+     * Method to update current state. It is used to spawn {@link Food food} and
+     * update {@link Snake snake's} current state
+     * @param dt difference of time between updates
+     */
     @Override
     public void update(double dt) {
         snakeControl();
 
         if (!food.isSpawned) food.spawn();
-        food.update(dt);
+        food.update();
         snake.update(dt);
     }
 
+    /**
+     * Method to draw current screen with its current state
+     * @param g graphics object to draw on the screen
+     */
     @Override
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -52,6 +83,10 @@ public class GameScene extends Scene {
         food.draw(g2);
     }
 
+    /**
+     * Method to change snake's direction according
+     * to current pressed key on the keyboard
+     */
     public void snakeControl() {
         if (keyListener.isKeyPressed(KeyEvent.VK_LEFT)) {
             snake.changeDirection(Direction.LEFT);

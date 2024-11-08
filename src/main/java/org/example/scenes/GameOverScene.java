@@ -10,11 +10,87 @@ import org.example.listeners.ML;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * This class is used to implement the screen after
+ * the game over. It consists with one question and to
+ * answers. You can start the game again if you click
+ * the yes button or go to main menu if you click on no button
+ * @author Ne-MoBu-u-Ne-ToNu
+ * @version 1.0
+ * @since 1.0
+ */
 public class GameOverScene extends Scene {
-    public BufferedImage title, playAgain, yes, yesPressed, no,noPressed;
-    public Rect titleRect, playAgainRect, yesRect, noRect;
-    public BufferedImage yesCurrent, noCurrent;
 
+    /**
+     * Image for game over title
+     */
+    public BufferedImage title;
+
+    /**
+     * Image for play again question
+     */
+    public BufferedImage playAgain;
+
+    /**
+     * Image for yes button
+     */
+    public BufferedImage yes;
+
+    /**
+     * Image for yes button pressed
+     */
+    public BufferedImage yesPressed;
+
+    /**
+     * Image for no button
+     */
+    public BufferedImage no;
+
+    /**
+     * Image for no button pressed
+     */
+    public BufferedImage noPressed;
+
+    /**
+     * Rectangle to store the parameters of
+     * game over title image
+     */
+    public Rect titleRect;
+
+    /**
+     * Rectangle to store the parameters of
+     * play again button image
+     */
+    public Rect playAgainRect;
+
+    /**
+     * Rectangle to store the parameters of
+     * yes button image
+     */
+    public Rect yesRect;
+
+    /**
+     * Rectangle to store the parameters of
+     * no button image
+     */
+    public Rect noRect;
+
+    /**
+     * Current image of yes button to draw
+     */
+    public BufferedImage yesCurrent;
+
+    /**
+     * Current image of no button to draw
+     */
+    public BufferedImage noCurrent;
+
+    /**
+     * Constructor of the class to load all the main
+     * parameters
+     * @param keyListener class for register keyboard buttons
+     * @param mouseListener class for register mouse and cursor
+     */
     public GameOverScene(KL keyListener, ML mouseListener) {
         super(keyListener, mouseListener);
 
@@ -34,6 +110,14 @@ public class GameOverScene extends Scene {
         noRect = new Rect(415, 370, 57, 40);
     }
 
+    /**
+     * Method to update current state. It is used to navigate between
+     * game screens. After 'death' in the game you will have to
+     * choose if you want to start again or no. If yes you redirect to
+     * the {@link GameScene gaming screen}. If no you redirect to the
+     * {@link  MenuScene menu screen}
+     * @param dt difference of time between updates
+     */
     @Override
     public void update(double dt) {
         if (mouseListener.getX() >= yesRect.x && mouseListener.getX() <= yesRect.x + yesRect.width &&
@@ -41,6 +125,7 @@ public class GameOverScene extends Scene {
             yesCurrent = yesPressed;
             if (mouseListener.isPressed()) {
                 org.example.Window.getWindow().changeState(1);
+                // We need to set mouse button to released to not press button on the next screen
                 mouseListener.setNotPressed();
             }
         } else {
@@ -52,6 +137,7 @@ public class GameOverScene extends Scene {
             noCurrent = noPressed;
             if (mouseListener.isPressed()) {
                 Window.getWindow().changeState(0);
+                // We need to set mouse button to released to not press button on the next screen
                 mouseListener.setNotPressed();
             }
         } else {
@@ -59,9 +145,13 @@ public class GameOverScene extends Scene {
         }
     }
 
+    /**
+     * Method to draw current screen with its current state
+     * @param g graphics object to draw on the screen
+     */
     @Override
     public void draw(Graphics g) {
-        g.setColor(Constants.foregroundColor);
+        g.setColor(Constants.backgroundColor);
         g.fillRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 
         g.drawImage(title, (int) titleRect.x, (int) titleRect.y, (int) titleRect.width, (int) titleRect.height, null);

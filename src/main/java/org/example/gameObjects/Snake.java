@@ -9,25 +9,71 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is used to describe the snake. It can make the snake
+ * move, change direction, grow and collide with itself, boundaries and
+ * food.
+ * @author Ne-MoBu-u-Ne-ToNu
+ * @version 1.0
+ * @since 1.0
+ */
 public class Snake {
-    public Rect[] body = new Rect[1000];
+
+    /**
+     * Body of the snake as an array of 10000 body pieces
+     */
+    public Rect[] body = new Rect[10000];
+
+    /**
+     * Rectangle of the game field
+     */
     public Rect background;
+
+    /**
+     * Size of each body piece
+     */
     public double bodyWidth, bodyHeight;
+
+    /**
+     * Direction of the snake current or to be changed
+     */
     public Direction direction;
 
-    public int size;
+    /**
+     * Current pointer on the tail of the snake
+     */
     public int tail = 0;
+
+    /**
+     * Current pointer on the head of the snake
+     */
     public int head = 0;
 
+    /**
+     * Waiting time between updates. Basically it is snake's speed.
+     * More waiting time, less snake's speed
+     */
     public double ogWaitBetweenUpdates = 0.1f;
+
+    /**
+     * Remaining time to wait between updates
+     */
     public double waitTimeLeft = ogWaitBetweenUpdates;
 
-    public Map<Direction, Double> snakeHeadRotation, snakeBodyRotation,
+    private final Map<Direction, Double> snakeHeadRotation, snakeBodyRotation,
             snakeTailRotation;
 
 
+    /**
+     * Constructor of the class where each field and snake's body are being initialized
+     * @param size initial size of the snake
+     * @param startX starting x coordinate of the snake
+     * @param startY starting y coordinate of the snake
+     * @param bodyWidth width of the snake's body piece
+     * @param bodyHeight height of the snake's body piece
+     * @param background rectangle describing game field
+     */
     public Snake(int size, double startX, double startY, double bodyWidth, double bodyHeight, Rect background) {
-        this.size = size;
         this.bodyWidth = bodyWidth;
         this.bodyHeight = bodyHeight;
         this.background = background;
@@ -55,23 +101,40 @@ public class Snake {
         head--;
     }
 
+    /**
+     * Method to update current state. When remaining time between updates
+     * is more than zero only remaining time is being updated. Else this
+     * method checks whether snake is intersecting with itself. If yes
+     * then it is game over else snake's state is being updated.
+     * @param dt time between frames
+     */
     public void update(double dt) {
         if (waitTimeLeft > 0) {
             waitTimeLeft -= dt;
             return;
         }
 
-        if (isIntersectingWithSelf()) {
+        if (isIntersectingForGameOver()) {
             Window.getWindow().changeState(2);
         }
         changeDirection();
         move();
     }
 
+    /**
+     * Method to draw current state of the snake. It has three main parts
+     * to draw: head, body and tail
+     * @param g2 object with methods to draw something on the screen
+     */
     public void draw(Graphics2D g2) {
         for (int i = tail; i != head; i = (i + 1) % body.length) {
             Rect piece = body[i];
 
+            /*
+              We need to check which body part we are dealing with, because
+              it depends on what picture is to be loaded and how to rotate
+              it. Also, you can scale particular body part.
+             */
             if (i == head - 1) {
                 g2.rotate(Math.toRadians(snakeHeadRotation.get(body[head].direction)), piece.x + bodyWidth / 2, piece.y + bodyHeight / 2);
                 g2.drawImage(LoadingContent.getSnakeHead(), (int) piece.x - 4, (int) piece.y, (int) bodyWidth + 8, (int) bodyHeight, null);
@@ -88,7 +151,12 @@ public class Snake {
         }
     }
 
-    public boolean isIntersectingWithSelf() {
+    /**
+     * Method to check if the snake is intersecting with itself
+     * and boundaries ot the game scene
+     * @return boolean value
+     */
+    public boolean isIntersectingForGameOver() {
         Rect headR = body[head];
         return isIntersectingWithRect(headR) || isIntersectingWithBoundaries(headR);
     }
@@ -98,6 +166,15 @@ public class Snake {
                 r1.y >= r2.y && r1.y + r1.height <= r2.y + r2.height);
     }
 
+    /**
+     * This method is used when we need to know if the snake is
+     * intersecting with particular rectangle. It can be useful
+     * for checking for game over like in {@link #isIntersectingForGameOver() isIntersectingForGameOver}
+     * method or for generating and eating food like in {@link Food#spawn() spawn} and
+     * {@link Food#update() update} methods
+     * @param rect rectangle to check
+     * @return boolean value
+     */
     public boolean isIntersectingWithRect(Rect rect) {
         for (int i = tail; i != head; i = (i + 1) % body.length) {
             if (isIntersecting(rect, body[i])) return true;
@@ -105,11 +182,16 @@ public class Snake {
         return false;
     }
 
-    public boolean isIntersectingWithBoundaries(Rect head) {
+    private boolean isIntersectingWithBoundaries(Rect head) {
         return (head.x < background.x || head.x + head.width > background.x + background.width ||
                 head.y < background.y || head.y + head.height > background.y + background.height);
     }
 
+    /**
+     * Method to move the snake in the asked direction. It
+     * finds new x and y coordinates according to current
+     * head direction. It is called from the {@link #update(double) update} method
+     */
     public void move() {
         waitTimeLeft = ogWaitBetweenUpdates;
         double newX = 0;
@@ -134,6 +216,12 @@ public class Snake {
             }
         }
 
+        /*
+          To make the snake move after all, we need
+          to take one piece from the tail and move
+          it to our new head position and then
+          update tail position in the snake array
+         */
         body[(head + 1) % body.length] = body[tail];
         body[(head + 1) % body.length].direction = body[head].direction;
         body[tail] = null;
@@ -144,6 +232,11 @@ public class Snake {
         body[head].y = newY;
     }
 
+    /**
+     * This method changes the direction of the snake's head, but
+     * it cannot change it opposite to the current direction
+     * @param direction direction to be changed on
+     */
     public void changeDirection(Direction direction) {
         this.direction = direction;
     }
@@ -158,6 +251,11 @@ public class Snake {
         }
     }
 
+    /**
+     * This method creates a new body piece of the snake
+     * opposite to the previous tail direction, and it is
+     * called on the {@link #update(double) update} method
+     */
     public void grow() {
         double newX = 0;
         double newY = 0;
